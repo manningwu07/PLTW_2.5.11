@@ -6,7 +6,7 @@ public class Game {
     private Scanner sc = new Scanner(System.in);
 
     private boolean play = true;
-    private boolean playerturn = Math.random() > 0.5;
+    private int playerturn = Math.random() > 0.5 ? 1 : 0;
     private String playerTurnName = "";
 
     public Game() {
@@ -32,11 +32,14 @@ public class Game {
         System.out.println("_______________________________________________");
         while (play) {
 
+            // switchPlayerTurn();
+
             System.out.println("\nThere are " + Board.getNumClips() + " clips left to take!");
 
-            if (player2.getComputerStatus() && !playerturn) {
+            if (player2.getComputerStatus() && playerturn % 2 == 1) {
                 playComputerMove();
                 playerTurnName = player1.getPlayerName();
+                playerturn++;
             }
 
             while (true) {
@@ -55,7 +58,7 @@ public class Game {
                             + " clips.");
                 }
             }
-
+            playerturn++;
             switchPlayerTurn();
             hasGameEnded();
         }
@@ -79,12 +82,10 @@ public class Game {
      * Postcondition: player playing switches
      */
     public void switchPlayerTurn() {
-        if (playerturn) {
+        if (playerturn % 2 == 0) {
             playerTurnName = player1.getPlayerName();
-            playerturn = false;
-        } else {
+        }else {
             playerTurnName = player2.getPlayerName();
-            playerturn = true;
         }
     }
 
@@ -96,7 +97,7 @@ public class Game {
      */
     public void hasGameEnded() {
         if (Board.getNumClips() == 0) {
-            // switchPlayerTurn();
+
             System.out.println("\n" + playerTurnName + " has won the game!");
             if (playAgain()) {
                 Board.populate();
